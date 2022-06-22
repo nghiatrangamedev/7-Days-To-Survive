@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bound
+  - Base
+  - Enemy
+  - Hand
   layers:
   - Default
   - TransparentFX

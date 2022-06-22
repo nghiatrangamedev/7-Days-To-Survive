@@ -11,9 +11,6 @@ public class PlayerController : MonoBehaviour
 
     float _horizontalInput;
     float _verticalInput;
-    float _mouseY;
-
-    float _rotateSpeed = 500.0f;
     float _speed = 20.0f;
     // Start is called before the first frame update
     void Start()
@@ -41,7 +38,6 @@ public class PlayerController : MonoBehaviour
     {
         _horizontalInput = Input.GetAxisRaw("Horizontal");
         _verticalInput = Input.GetAxisRaw("Vertical");
-        _mouseY = - Input.GetAxisRaw("Mouse Y");
     }
 
     void PlayerMovement()
