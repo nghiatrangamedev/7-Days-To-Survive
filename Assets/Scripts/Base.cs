@@ -41,7 +41,7 @@ public class Base : MonoBehaviour
     {
         if (collision.gameObject.tag == "Hand")
         {
-            Heath -= 50;
+            Heath -= 10;
         }
     }
 

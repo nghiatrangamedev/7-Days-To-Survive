@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject _hand;
     Rigidbody2D _enemyRb;
 
-    float _speed = 20.0f;
+    float _speed = 5.0f;
 
     bool _isAttacked = false;
     bool _isCollideWithBase = false;
@@ -69,6 +69,14 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.tag == "Base")
         {
             _isCollideWithBase = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Bullet")
+        {
+            Destroy(gameObject);
         }
     }
 }

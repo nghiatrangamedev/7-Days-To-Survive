@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 {
     Rigidbody2D _bulletRb;
 
-    float _speed = 30.0f;
+    float _speed = 15.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
 
     void MoveForward()
     {
-        _bulletRb.MovePosition(transform.position + Vector3.left * _speed * Time.deltaTime);
+        _bulletRb.MovePosition(transform.position - transform.right * _speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
