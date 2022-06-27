@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+
     [SerializeField] GameObject _hand;
+
+    GameManager _gameManagerScript;
     Rigidbody2D _enemyRb;
 
     float _speed = 5.0f;
@@ -16,13 +19,23 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         _enemyRb = GetComponent<Rigidbody2D>();
+        _gameManagerScript = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        MoveForward();
-        Attack();
+        if (_gameManagerScript.IsPlaying)
+        {
+            MoveForward();
+            Attack();
+        }
+
+        else
+        {
+            DestroyWhenGameOver();
+        }
+        
     }
 
     void MoveForward()
@@ -32,7 +45,7 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-         if (_isCollideWithBase && !_isAttacked)
+        if (_isCollideWithBase && !_isAttacked)
         {
             _hand.SetActive(true);
             _isAttacked = true;
@@ -55,6 +68,10 @@ public class Enemy : MonoBehaviour
         _hand.SetActive(false);
     }
 
+    void DestroyWhenGameOver()
+    {
+        Destroy(gameObject);
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

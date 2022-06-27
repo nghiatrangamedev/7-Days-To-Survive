@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _gameOver;
     [SerializeField] GameObject _youWin;
     [SerializeField] GameObject _base;
+    [SerializeField] GameObject _playAgainMenu;
+
 
     Base _baseScript;
     PlayerController _playerController;
@@ -22,6 +24,18 @@ public class GameManager : MonoBehaviour
     float _rangeY = 3.7f;
     float _startTime = 2.0f;
     float _timeRate = 1.0f;
+
+    bool _isPlaying = true;
+
+    public bool IsPlaying 
+    {
+        get { return _isPlaying; }
+
+        private set
+        {
+            _isPlaying = value;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -35,16 +49,25 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckWinCondition();
-        GameOver();
-        DisplayHeath();
-        DisplayAmmo();
+        if (_isPlaying)
+        {
+            CheckWinCondition();
+            GameOver();
+            DisplayHeath();
+            DisplayAmmo();
+        }
+
+        else
+        {
+            DisplayMenu();
+        }
     }
 
     void GameOver()
     {
         if (_baseScript.Heath == 0)
         {
+            IsPlaying = false;
             Destroy(_base);
             _gameOver.SetActive(true);
         }
@@ -60,9 +83,14 @@ public class GameManager : MonoBehaviour
         _ammoText.SetText("Ammo: " + _playerController.AmmoTotal);
     }
 
+    void DisplayMenu()
+    {
+        _playAgainMenu.SetActive(true);
+    }
+
     void SpawnEnemy()
     {
-        if (_enemiesSpawned <= _maximumEnemies)
+        if (_enemiesSpawned <= _maximumEnemies && _isPlaying)
         {
             Instantiate(_enemyPrefabs, RandomEnemyPos(), _enemyPrefabs.transform.rotation);
             _enemiesSpawned++;
@@ -81,6 +109,7 @@ public class GameManager : MonoBehaviour
     {
         if (_enemiesSpawned >= _maximumEnemies && GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
         {
+            _isPlaying = false;
             _youWin.SetActive(true);
         }
     }

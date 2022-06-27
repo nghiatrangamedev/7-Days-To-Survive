@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    
     [SerializeField] Transform _gunPosition;
+    [SerializeField] GameObject _gameManager;
     [SerializeField] GameObject _bullet;
     [SerializeField] Camera _camera;
+
+    GameManager _gameManagerScript;
 
     Rigidbody2D _playerRb;
 
@@ -48,23 +52,23 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _playerRb = GetComponent<Rigidbody2D>();
+        _gameManagerScript = _gameManager.GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        PlayerInput();
-        Aim();
+        if (_gameManagerScript.IsPlaying)
+        {
+            PlayerInput();
+            Aim();
+        }
+        
     }
 
     private void FixedUpdate()
     {
         PlayerMovement();
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            PlayerShooting();
-        }
     }
 
     void PlayerInput()
@@ -73,6 +77,18 @@ public class PlayerController : MonoBehaviour
         _verticalInput = Input.GetAxisRaw("Vertical");
 
         _mousePos = _camera.ScreenToWorldPoint(Input.mousePosition);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            PlayerShooting();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            _isShoot = true;
+            _isReload = true;
+            StartCoroutine(ReloadTime());
+        }
     }
 
     void PlayerMovement()
@@ -120,6 +136,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_ammoTotal <= 0)
         {
+            _isShoot = true;
             _isReload = true;
             StartCoroutine(ReloadTime());
         }
@@ -130,6 +147,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(2);
         AmmoTotal = 50;
         _isReload = false;
+        _isShoot = false;
     }
 
 }
